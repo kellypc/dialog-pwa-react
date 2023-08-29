@@ -1,24 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import { useQuery } from "@apollo/client";
+
+import INFO_PERSON from "./querys/index";
+
+import "./App.css";
 
 function App() {
+  const { loading, error, data } = useQuery(INFO_PERSON);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>an error occurred...</p>;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <section className="parent">
+      {data.user.results.map((user, index) => (
+        <div className="card" key={user.name}>
+          <img src={user.picture} alt="Avatar" style={{ width: "100%" }} />
+          <div className="container">
+            <h4>
+              <b>name: {user.age}</b>
+            </h4>
+            <p>
+              <b>eyeColor: {user.eyeColor}</b>
+            </p>
+            <p>
+              <b>Company: {user.company}</b>
+            </p>
+          </div>
+        </div>
+      ))}
+    </section>
   );
 }
 
